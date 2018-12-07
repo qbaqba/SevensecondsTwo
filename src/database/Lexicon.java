@@ -1,9 +1,8 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Lexicon {
 
@@ -32,5 +31,25 @@ public class Lexicon {
             return false;
         }
         return  true;
+    }
+
+    public LinkedList<Nouns> selectNouns(){
+        LinkedList<Nouns> nounsLinkedList = new LinkedList<Nouns>();
+        try{
+            ResultSet rs = stmt.executeQuery("select * from nouns");
+            int id;
+            String plNoun, engNoun;
+            while(rs.next()){
+                id = rs.getInt("ID_nouns");
+                plNoun = rs.getString("PL_nouns");
+                engNoun = rs.getString("ENG_nouns");
+                nounsLinkedList.add(new Nouns(id, plNoun, engNoun));
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+        return nounsLinkedList;
     }
 }

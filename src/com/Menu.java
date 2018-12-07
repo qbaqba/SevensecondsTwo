@@ -1,26 +1,43 @@
 package com;
 
+import database.Lexicon;
+import database.Nouns;
+
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Menu {
 
-    private int option;
+    protected int option;
 
-    private int menuID = 0;
-    private int backMenuID;
+    protected int menuID = 0;
+    protected int backMenuID;
 
     int getMenuID(){
         return menuID;
     }
 
     Scanner input = new Scanner(System.in);
+    Lexicon lex = new Lexicon();
+
+//    LexiconMenu lexMenu = new LexiconMenu();
+ //   OptionsMenu optMenu = new OptionsMenu();
+
+    LinkedList<Nouns> nouns = lex.selectNouns();
+    int ik = nouns.size();
+
 
     void showMenu(){
         if(menuID == 0) showMainMenu();
-        if(menuID == 1) showLexiconMenu();
-        if(menuID == 2) showPlayMenu();
-        if(menuID == 3) showOptionsMenu();
-        if(menuID == 4) showResultsMenu();
+        if(menuID == 1) {
+
+                System.out.println(nouns.get(0).toString());
+
+        }
+          if(menuID == 2) showPlayMenu();
+     //   if(menuID == 3) optMenu.showOptionsMenu();
+       // if(menuID == 31) optMenu.showCategory();
+          if(menuID == 4) showResultsMenu();
     }
 
     // menuID = 0
@@ -52,21 +69,18 @@ public class Menu {
         System.out.println("TestPlay");
     }
 
-    // menuID = 3
-    void showOptionsMenu(){
-        System.out.println("[1] - add words\n[2] - edit words\n[3] - delete the words"
-        +"\n[4] - create the category\n[9] - back");
-        System.out.print("Option: ");
-        option = input.nextInt();
-        input.nextLine();
-        if(option == 4){
-            System.out.println("");
-        }
-    }
+
 
     // menuID = 4
     void showResultsMenu(){
         System.out.println("TestResults");
+    }
+
+    void showCategoryMenu(){
+        System.out.println("[1] - nouns\n[2] - verbs\n[3] - adjectives\n[9] - back");
+        System.out.print("Select category: ");
+        option = input.nextInt();
+        input.nextLine();
     }
 
 
