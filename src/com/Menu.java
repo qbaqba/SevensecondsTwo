@@ -14,8 +14,6 @@ public class Menu {
     protected int categoryID;
 
     protected int menuID = 0;
-    protected int backMenuID;
-
 
     int getMenuID(){
         return menuID;
@@ -27,20 +25,17 @@ public class Menu {
 //    LexiconMenu lexMenu = new LexiconMenu();
  //   OptionsMenu optMenu = new OptionsMenu();
 
-    LinkedList<Nouns> nouns = lex.selectNouns();
-    Iterator<Nouns> nounsIterator = nouns.listIterator();
 
-    LinkedList<Verbs> verbs = lex.selectVerbs();
-    Iterator<Verbs> verbsIterator = verbs.listIterator();
+
 
 
     void showMenu(){
         if(menuID == 0) showMainMenu();
         if(menuID == 1) showLexiconMenu();
-          if(menuID == 2) showPlayMenu();
-     //   if(menuID == 3) optMenu.showOptionsMenu();
-       // if(menuID == 31) optMenu.showCategory();
-          if(menuID == 4) showResultsMenu();
+        if(menuID == 2) showPlayMenu();
+        if(menuID == 3) showOptionsMenu();
+        if(menuID == 31) addWordMenu();
+        if(menuID == 4) showResultsMenu();
     }
 
     // menuID = 0
@@ -56,6 +51,36 @@ public class Menu {
         if(option == 0) menuID = -1;
     }
 
+
+    //////////////////////TEST//////////////////
+    public void showWords(int i){
+        if(i == 1){
+            LinkedList<Nouns> nouns = lex.selectNouns();
+            Iterator<Nouns> nounsIterator = nouns.listIterator();
+
+
+            while(nounsIterator.hasNext()){
+                System.out.println(nounsIterator.next().toString());
+            }
+            nounsIterator = nouns.listIterator();
+        }
+        else if(i == 2){
+            LinkedList<Verbs> verbs = lex.selectVerbs();
+            Iterator<Verbs> verbsIterator = verbs.listIterator();
+
+            while(verbsIterator.hasNext()){
+                System.out.println(verbsIterator.next().toString());
+            }
+            verbsIterator = verbs.listIterator();
+        }
+        menuID = 3;
+    }
+
+
+
+
+    ////////////////////////////////////////////
+
     // menuID = 1
     void showLexiconMenu(){
         System.out.println("CHOOSE CATEGORY\n[1] - NOUNS\n[2] - VERBS\n[3] - ADJECTIVES \n[9] - BACK");
@@ -63,12 +88,19 @@ public class Menu {
         option = input.nextInt();
         input.nextLine();
         if(option == 1){
+            LinkedList<Nouns> nouns = lex.selectNouns();
+            Iterator<Nouns> nounsIterator = nouns.listIterator();
+
+
             while(nounsIterator.hasNext()){
                 System.out.println(nounsIterator.next().toString());
             }
             nounsIterator = nouns.listIterator();
         }
         if(option == 2) {
+            LinkedList<Verbs> verbs = lex.selectVerbs();
+            Iterator<Verbs> verbsIterator = verbs.listIterator();
+
             while(verbsIterator.hasNext()){
                 System.out.println(verbsIterator.next().toString());
             }
@@ -91,10 +123,56 @@ public class Menu {
         option = input.nextInt();
         input.nextLine();
         if(option == 9) menuID = 0;
-        if(option == 1 || option == 2 || option == 3){
-            showCategoryMenu();
+        else if(option == 1 || option == 2 || option == 3){
+            System.out.println("[1] - NOUNS\n[2] - VERBS\n[3] - ADJECTIVES\n[9] - BACK");
+            System.out.print("SELECT CATEGORY: ");
+            categoryID = input.nextInt();
+            input.nextLine();
+            if(categoryID == 9){
+                return;
+            }
+        }
+        if(option == 1){
+            menuID = 31;
+        }
+        else if(option == 2){
+            menuID = 32;
         }
     }
+
+    // menu 31
+    void addWordMenu(){
+        String pl1, pl2, eng1, eng2;
+        boolean additionalMeaning;
+
+        System.out.print("Enter polish meaning: ");
+        pl1 = input.nextLine();
+        System.out.print("Enter english meaning: ");
+        eng1 = input.nextLine();
+        System.out.println("Enter additional polish meaning (press enter to skip)");
+        pl2 = input.nextLine();
+        System.out.println("Enter additional english meaning (press enter to skip)");
+        eng2 = input.nextLine();
+        if(pl2.length() == 0){
+            pl2 = "---";
+        }
+        if(eng2.length() == 0){
+            eng2 = "---";
+        }
+        if(categoryID == 1)
+        lex.insertNoun(pl1, eng1);
+        if(categoryID == 2)
+            lex.insertVerb(pl1, pl2, eng1, eng2);
+
+        menuID = 3;
+    }
+
+    // menuID = 32
+    void editWordMenu(){
+        showWords(categoryID);
+        menuID = 3;
+    }
+
 
     // menuID = 4
     void showResultsMenu(){
@@ -104,9 +182,9 @@ public class Menu {
     void showCategoryMenu(){
         System.out.println("[1] - nouns\n[2] - verbs\n[3] - adjectives\n[9] - back");
         System.out.print("Select category: ");
-        option = input.nextInt();
+        categoryID = input.nextInt();
         input.nextLine();
-        if( option == 9){
+        if( categoryID == 9){
             menuID = 3;
             return;
         }

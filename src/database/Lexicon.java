@@ -63,11 +63,9 @@ public class Lexicon {
                 idVerb = rs.getInt(1);
                 plVerb1 = rs.getString(2);
                 plVerb2 = rs.getString(3);
-                plVerb3 = rs.getString(4);
-                engVerb1 = rs.getString(5);
-                engVerb2 = rs.getString(6);
-                engVerb3 = rs.getString(7);
-                verbsLinkedList.add(new Verbs(idVerb,plVerb1,plVerb2,plVerb3,engVerb1,engVerb2,engVerb3));
+                engVerb1 = rs.getString(4);
+                engVerb2 = rs.getString(5);
+                verbsLinkedList.add(new Verbs(idVerb,plVerb1,plVerb2,engVerb1,engVerb2));
             }
         }
         catch (SQLException e){
@@ -75,5 +73,30 @@ public class Lexicon {
             return null;
         }
         return verbsLinkedList;
+    }
+
+    public boolean insertNoun(String pl, String eng){
+        try{String sqlString = "insert into nouns values"+
+                "(NULL, '"+pl+"', '"+eng+"');";
+        stmt.execute(sqlString);
+        return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertVerb(String pl1, String pl2, String eng1, String eng2){
+        String sqlString = "insert into verbs values"+
+                "(NULL, '"+pl1+"', '"+pl2+"', '"+eng1+"', '"+eng2+"');";
+        try{
+            stmt.execute(sqlString);
+            return true;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }
