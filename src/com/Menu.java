@@ -57,7 +57,7 @@ public class Menu {
         if(i == 1){
             LinkedList<Nouns> nouns = lex.selectNouns();
             Iterator<Nouns> nounsIterator = nouns.listIterator();
-
+            System.out.println("s");
 
             while(nounsIterator.hasNext()){
                 System.out.println(nounsIterator.next().toString());
