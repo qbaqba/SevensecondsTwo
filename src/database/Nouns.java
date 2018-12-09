@@ -1,6 +1,13 @@
 package database;
 
+import java.util.LinkedList;
+import java.util.Scanner;
+
 public class Nouns {
+
+    Scanner input = new Scanner(System.in);
+
+    LinkedList<Nouns> nouns = new LinkedList<>();
 
     private int idNouns;
     private String plNouns;
@@ -34,6 +41,13 @@ public class Nouns {
         this.idNouns = idNouns;
         this.plNouns = plNouns;
         this.engNouns = engNouns;
+    }
+
+    public Nouns(){
+        System.out.print("Polish word: ");
+        this.plNouns = input.nextLine();
+        System.out.println("English word: ");
+        this.engNouns = input.nextLine();
     }
 
     public String toString(){

@@ -52,4 +52,28 @@ public class Lexicon {
         }
         return nounsLinkedList;
     }
+
+    public LinkedList<Verbs> selectVerbs(){
+        LinkedList<Verbs> verbsLinkedList = new LinkedList<>();
+        try{
+            ResultSet rs = stmt.executeQuery("SELECT * FROM verbs");
+            int idVerb;
+            String plVerb1, plVerb2, plVerb3, engVerb1, engVerb2, engVerb3;
+            while (rs.next()){
+                idVerb = rs.getInt(1);
+                plVerb1 = rs.getString(2);
+                plVerb2 = rs.getString(3);
+                plVerb3 = rs.getString(4);
+                engVerb1 = rs.getString(5);
+                engVerb2 = rs.getString(6);
+                engVerb3 = rs.getString(7);
+                verbsLinkedList.add(new Verbs(idVerb,plVerb1,plVerb2,plVerb3,engVerb1,engVerb2,engVerb3));
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+        return verbsLinkedList;
+    }
 }
