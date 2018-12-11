@@ -99,4 +99,32 @@ public class Lexicon {
             return false;
         }
     }
+
+    public int getLastId(String categoryName){
+        int lastID = 0;
+
+        try{
+            ResultSet rs = stmt.executeQuery("SELECT * from "+categoryName+";");
+            while(rs.next()){
+                lastID++;
+            }
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return lastID;
+    }
+
+    public void updateRecord(int recordID, String categoryName, String pl1, String pl2, String eng1, String eng2){
+        String sqlString = "update "+categoryName+" set pl_verbs1="+pl1+", pl_verbs2="+pl2+", eng_verbs1="+eng1+
+                ", eng_verbs2="+eng2+" where id_verbs="+recordID+";";
+
+        try{
+            stmt.execute(sqlString);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
 }

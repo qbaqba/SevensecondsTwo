@@ -10,10 +10,12 @@ import java.util.Scanner;
 
 public class Menu {
 
-    protected int option;
-    protected int categoryID;
+    private int option;
 
-    protected int menuID = 0;
+    private int categoryID;
+    private String categoryName;
+
+    private int menuID = 0;
 
     int getMenuID(){
         return menuID;
@@ -27,7 +29,11 @@ public class Menu {
 
 
 
-
+    void switchCategoryIdName(int categoryID){
+        if(categoryID == 1)categoryName = "nouns";
+        else if(categoryID == 2)categoryName = "verbs";
+        else if(categoryID == 3)categoryName = "adjectives";
+    }
 
     void showMenu(){
         if(menuID == 0) showMainMenu();
@@ -35,6 +41,7 @@ public class Menu {
         if(menuID == 2) showPlayMenu();
         if(menuID == 3) showOptionsMenu();
         if(menuID == 31) addWordMenu();
+        if(menuID == 32) editWordMenu();
         if(menuID == 4) showResultsMenu();
     }
 
@@ -57,7 +64,7 @@ public class Menu {
         if(i == 1){
             LinkedList<Nouns> nouns = lex.selectNouns();
             Iterator<Nouns> nounsIterator = nouns.listIterator();
-            System.out.println("s");
+            System.out.println("");
 
             while(nounsIterator.hasNext()){
                 System.out.println(nounsIterator.next().toString());
@@ -73,7 +80,6 @@ public class Menu {
             }
             verbsIterator = verbs.listIterator();
         }
-        menuID = 3;
     }
 
 
@@ -87,27 +93,10 @@ public class Menu {
         System.out.print("Option: ");
         option = input.nextInt();
         input.nextLine();
-        if(option == 1){
-            LinkedList<Nouns> nouns = lex.selectNouns();
-            Iterator<Nouns> nounsIterator = nouns.listIterator();
-
-
-            while(nounsIterator.hasNext()){
-                System.out.println(nounsIterator.next().toString());
-            }
-            nounsIterator = nouns.listIterator();
+        if(option == 1 || option == 2 || option == 3){
+            showWords(option);
         }
-        if(option == 2) {
-            LinkedList<Verbs> verbs = lex.selectVerbs();
-            Iterator<Verbs> verbsIterator = verbs.listIterator();
-
-            while(verbsIterator.hasNext()){
-                System.out.println(verbsIterator.next().toString());
-            }
-            verbsIterator = verbs.listIterator();
-        }
-        if(option == 3) System.out.println("3");
-        if(option == 9) menuID = 0;
+        else if(option == 9) menuID = 0;
     }
 
 
@@ -128,6 +117,7 @@ public class Menu {
             System.out.print("SELECT CATEGORY: ");
             categoryID = input.nextInt();
             input.nextLine();
+            switchCategoryIdName(categoryID);
             if(categoryID == 9){
                 return;
             }
@@ -169,8 +159,22 @@ public class Menu {
 
     // menuID = 32
     void editWordMenu(){
+        int recordID;
+
         showWords(categoryID);
-        menuID = 3;
+        do {
+            System.out.print("Enter the word ID, that you want edit: ");
+            System.out.println("[0] - BACK");
+            recordID = input.nextInt();
+            input.nextLine();
+            if(recordID < 0 || recordID > lex.getLastId(categoryName))
+                System.out.println("WRONG ID..");
+        }while (recordID < 0 || recordID > lex.getLastId(categoryName));
+        if(recordID == 0) menuID = 3;
+        else{
+            lex.updateRecord(2,"verbs","jak","to", "how","this");
+        }
+
     }
 
 
