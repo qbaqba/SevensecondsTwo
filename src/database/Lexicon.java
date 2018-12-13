@@ -53,13 +53,39 @@ public class Lexicon {
         return nounsLinkedList;
     }
 
+    public void insertResult(int score){
+        String sqlResult = "insert into results values (NULL, "+score+");";
+        try{
+            stmt.execute(sqlResult);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void showResults(){
+        int id, score;
+        try{
+            ResultSet rs = stmt.executeQuery("SELECT * FROM results;");
+            while (rs.next()){
+                id = rs.getInt(1);
+                score = rs.getInt(2);
+                System.out.println("ID: "+id+"\tSCORE: "+score+"/7");
+            }
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     public Verbs putVerb(int id){
 
         Verbs someVerb = null;
         try{
             String pl1, pl2, eng1, eng2;
-            ResultSet rs = stmt.executeQuery("SELECT FROM verbs WHERE id_verbs ="+id);
+            ResultSet rs = stmt.executeQuery("SELECT * FROM verbs WHERE id_verbs ="+id+";");
 
+            rs.next();
             pl1 = rs.getString(2);
             pl2 = rs.getString(3);
             eng1 = rs.getString(4);
@@ -97,7 +123,18 @@ public class Lexicon {
         return verbsLinkedList;
     }
 
+    public void resetID(String categoryName){
+        String deleteString = "alter table "+categoryName+" drop column id_verbs;";
+        String addString = "alter table "+categoryName+" add column id_verbs int primary key not null auto_increment first;";
 
+        try{
+            stmt.execute(deleteString);
+            stmt.execute(addString);
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
     public boolean insertNoun(String pl, String eng){
         try{String sqlString = "insert into nouns values"+

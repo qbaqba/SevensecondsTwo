@@ -45,14 +45,13 @@ public class Menu {
         if(menuID == 3) showOptionsMenu();
         if(menuID == 31) addWordMenu();
         if(menuID == 32) editWordMenu();
+        if(menuID == 33) deleteWordMenu();
         if(menuID == 4) showResultsMenu();
     }
 
     // menuID = 0
     void showMainMenu(){
 
-        match.setListVerbs();
-        match.showList();
         System.out.println("[1] - LEXICON\n[2] - PLAY\n[3] - OPTIONS\n[4] - RESULTS"
         +"\n[0] - EXIT");
         option = input.nextInt();
@@ -129,8 +128,9 @@ public class Menu {
                 return;
             }
             else{
-                Match match = new Match(gameMode, "nouns");
-
+                Match match = new Match(gameMode, "verbs");
+                match.setListVerbs();
+                match.startGame(gameMode);
             }
         }
 
@@ -243,31 +243,28 @@ public class Menu {
             menuID = 3;
             return;
         }
-
         lex.deleteRecord(recordID,categoryName);
+        lex.resetID(categoryName);
     }
 
 
     // menuID = 4
     void showResultsMenu(){
-        System.out.println("TestResults");
-    }
-
-    void showCategoryMenu(){
-        System.out.println("[1] - nouns\n[2] - verbs\n[3] - adjectives\n[9] - back");
-        System.out.print("Select category: ");
-        categoryID = input.nextInt();
+        System.out.println("[1] - SHOW RESULTS\n[9] - BACK");
+        option = input.nextInt();
         input.nextLine();
-        if( categoryID == 9){
-            menuID = 3;
+        if(option == 9){
+            menuID = 0;
             return;
         }
-        else{
-            categoryID = option;
+        else if(option == 1){
+            lex.showResults();
+            System.out.println("[9] - BACK");
+            option = input.nextInt();
+            input.nextLine();
+            if(option == 9){
+                menuID = 0;
+            }
         }
     }
-
-
-
-
 }
