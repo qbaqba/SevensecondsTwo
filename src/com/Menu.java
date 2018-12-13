@@ -1,6 +1,7 @@
 package com;
 
 import database.Lexicon;
+import database.Match;
 import database.Nouns;
 import database.Verbs;
 
@@ -23,6 +24,8 @@ public class Menu {
 
     Scanner input = new Scanner(System.in);
     Lexicon lex = new Lexicon();
+
+    Match match = new Match(1,"nouns");
 
 //    LexiconMenu lexMenu = new LexiconMenu();
  //   OptionsMenu optMenu = new OptionsMenu();
@@ -47,6 +50,9 @@ public class Menu {
 
     // menuID = 0
     void showMainMenu(){
+
+        match.setListVerbs();
+        match.showList();
         System.out.println("[1] - LEXICON\n[2] - PLAY\n[3] - OPTIONS\n[4] - RESULTS"
         +"\n[0] - EXIT");
         option = input.nextInt();
@@ -102,7 +108,32 @@ public class Menu {
 
     // menuID = 2
     void showPlayMenu(){
-        System.out.println("TestPlay");
+        int gameMode;
+
+        System.out.println("[1] - NOUNS\n[2] - VERBS\n[3] - ADJECTIVES\n[9] - BACK");
+        System.out.print("SELECT CATEGORY: ");
+        categoryID = input.nextInt();
+        input.nextLine();
+        switchCategoryIdName(categoryID);
+        if(categoryID == 9){
+            menuID = 0;
+            return;
+        }
+        else {
+            System.out.println("* CHOOSE GAME MODE *");
+            System.out.println("[1] - ENGLISH\n[2] - POLISH\n[9] - BACK");
+            gameMode = input.nextInt();
+            input.nextLine();
+            if (gameMode == 9) {
+                menuID = 2;
+                return;
+            }
+            else{
+                Match match = new Match(gameMode, "nouns");
+
+            }
+        }
+
     }
 
     // menuID = 3
@@ -128,6 +159,9 @@ public class Menu {
         else if(option == 2){
             menuID = 32;
         }
+        else if(option == 3){
+            menuID = 33;
+        }
     }
 
     // menu 31
@@ -139,9 +173,9 @@ public class Menu {
         pl1 = input.nextLine();
         System.out.print("Enter english meaning: ");
         eng1 = input.nextLine();
-        System.out.println("Enter additional polish meaning (press enter to skip)");
+        System.out.print("Enter additional polish meaning (press enter to skip)");
         pl2 = input.nextLine();
-        System.out.println("Enter additional english meaning (press enter to skip)");
+        System.out.print("Enter additional english meaning (press enter to skip)");
         eng2 = input.nextLine();
         if(pl2.length() == 0){
             pl2 = "---";
@@ -160,6 +194,7 @@ public class Menu {
     // menuID = 32
     void editWordMenu(){
         int recordID;
+        String pl1, pl2, eng1, eng2;
 
         showWords(categoryID);
         do {
@@ -170,11 +205,46 @@ public class Menu {
             if(recordID < 0 || recordID > lex.getLastId(categoryName))
                 System.out.println("WRONG ID..");
         }while (recordID < 0 || recordID > lex.getLastId(categoryName));
-        if(recordID == 0) menuID = 3;
-        else{
-            lex.updateRecord(2,"verbs","jak","to", "how","this");
+        if(recordID == 0){
+            menuID = 3;
+            return;
+        }
+        System.out.print("Enter polish meaning: ");
+        pl1 = input.nextLine();
+        System.out.print("Enter english meaning: ");
+        eng1 = input.nextLine();
+        System.out.print("Enter additional polish meaning (press enter to skip)");
+        pl2 = input.nextLine();
+        System.out.print("Enter additional english meaning (press enter to skip)");
+        eng2 = input.nextLine();
+        if(pl2.length() == 0){
+            pl2 = "---";
+        }
+        if(eng2.length() == 0){
+            eng2 = "---";
+        }
+        lex.updateRecord(recordID,categoryName,pl1,pl2, eng1,eng2);
+        menuID = 3;
+    }
+
+    void deleteWordMenu(){
+        int recordID;
+
+        showWords(categoryID);
+        do {
+            System.out.print("Enter the word ID, that you want delete: ");
+            System.out.println("[0] - BACK");
+            recordID = input.nextInt();
+            input.nextLine();
+            if(recordID < 0 || recordID > lex.getLastId(categoryName))
+                System.out.println("WRONG ID..");
+        }while (recordID < 0 || recordID > lex.getLastId(categoryName));
+        if(recordID == 0){
+            menuID = 3;
+            return;
         }
 
+        lex.deleteRecord(recordID,categoryName);
     }
 
 

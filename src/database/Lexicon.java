@@ -53,6 +53,28 @@ public class Lexicon {
         return nounsLinkedList;
     }
 
+    public Verbs putVerb(int id){
+
+        Verbs someVerb = null;
+        try{
+            String pl1, pl2, eng1, eng2;
+            ResultSet rs = stmt.executeQuery("SELECT FROM verbs WHERE id_verbs ="+id);
+
+            pl1 = rs.getString(2);
+            pl2 = rs.getString(3);
+            eng1 = rs.getString(4);
+            eng2 = rs.getString(5);
+
+           someVerb = new Verbs(id, pl1, pl2, eng1, eng2);
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return someVerb;
+    }
+
+
     public LinkedList<Verbs> selectVerbs(){
         LinkedList<Verbs> verbsLinkedList = new LinkedList<>();
         try{
@@ -74,6 +96,8 @@ public class Lexicon {
         }
         return verbsLinkedList;
     }
+
+
 
     public boolean insertNoun(String pl, String eng){
         try{String sqlString = "insert into nouns values"+
@@ -116,13 +140,24 @@ public class Lexicon {
     }
 
     public void updateRecord(int recordID, String categoryName, String pl1, String pl2, String eng1, String eng2){
-        String sqlString = "update "+categoryName+" set pl_verbs1="+pl1+", pl_verbs2="+pl2+", eng_verbs1="+eng1+
-                ", eng_verbs2="+eng2+" where id_verbs="+recordID+";";
+        String sqlString = "update "+categoryName+" set pl_verbs1='"+pl1+"', pl_verbs2='"+pl2+"', eng_verbs1='"+eng1+
+                "', eng_verbs2='"+eng2+"' where id_verbs="+recordID+";";
 
         try{
             stmt.execute(sqlString);
         }
         catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteRecord(int recordID, String categoryName){
+        String sqlString = "delete from "+categoryName+" where id_verbs="+recordID+";";
+
+        try{
+            stmt.execute(sqlString);
+        }
+        catch(SQLException e){
             e.printStackTrace();
         }
     }
